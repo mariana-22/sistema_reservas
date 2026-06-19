@@ -1,0 +1,58 @@
+<div class="recursos-container">
+  <div class="recursos-header">
+    <h1>Recursos Disponibles</h1>
+    <div class="search-bar">
+      <input 
+        type="text" 
+        [(ngModel)]="filtro" 
+        (input)="aplicarFiltro()"
+        placeholder="Buscar recursos..."
+        class="search-input"
+      >
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="loading">
+    Cargando recursos...
+  </div>
+
+  <div *ngIf="error" class="alert alert-error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!cargando && recursosFiltrados.length === 0" class="no-data">
+    No hay recursos disponibles
+  </div>
+
+  <div class="recursos-grid">
+    <div *ngFor="let recurso of recursosFiltrados" class="recurso-card">
+      <div class="recurso-header">
+        <h3>{{ recurso.nombre }}</h3>
+        <span class="tipo-badge">{{ recurso.tipo }}</span>
+      </div>
+
+      <p class="descripcion">{{ recurso.descripcion }}</p>
+
+      <div class="recurso-info">
+        <div class="info-item">
+          <span class="label">Ubicación:</span>
+          <span class="value">{{ recurso.ubicacion }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Capacidad:</span>
+          <span class="value">{{ recurso.capacidad }} personas</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Horarios:</span>
+          <span class="value">{{ recurso.horario_inicio }} - {{ recurso.horario_fin }}</span>
+        </div>
+      </div>
+
+      <div class="recurso-actions">
+        <a [routerLink]="['/recursos', recurso.id]" class="btn btn-primary">
+          Ver Disponibilidad
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

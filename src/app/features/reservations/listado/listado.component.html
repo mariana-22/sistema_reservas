@@ -1,0 +1,53 @@
+<div class="reservas-container">
+  <div class="reservas-header">
+    <h1>Mis Reservas</h1>
+  </div>
+
+  <div *ngIf="cargando" class="loading">
+    Cargando reservas...
+  </div>
+
+  <div *ngIf="error" class="alert alert-error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!cargando && reservas.length === 0" class="no-data">
+    No tienes reservas. <a routerLink="/recursos">Haz una nueva reserva</a>
+  </div>
+
+  <div class="reservas-list">
+    <div *ngFor="let reserva of reservas" class="reserva-card" [ngClass]="getEstadoClase(reserva.estado)">
+      <div class="reserva-header">
+        <h3>{{ getNombreRecurso(reserva.recurso_id) }}</h3>
+        <span class="estado-badge" [ngClass]="'estado-' + reserva.estado">
+          {{ reserva.estado }}
+        </span>
+      </div>
+
+      <div class="reserva-info">
+        <div class="info-item">
+          <span class="label">Fecha:</span>
+          <span class="value">{{ reserva.fecha_inicio | date:'mediumDate' }} - {{ reserva.fecha_fin | date:'mediumDate' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Horario:</span>
+          <span class="value">{{ reserva.hora_inicio }} - {{ reserva.hora_fin }}</span>
+        </div>
+        <div class="info-item" *ngIf="reserva.motivo">
+          <span class="label">Motivo:</span>
+          <span class="value">{{ reserva.motivo }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Creada:</span>
+          <span class="value">{{ reserva.fecha_creacion | date:'medium' }}</span>
+        </div>
+      </div>
+
+      <div class="reserva-actions" *ngIf="reserva.estado !== 'cancelada'">
+        <button (click)="cancelarReserva(reserva.id)" class="btn btn-danger">
+          Cancelar Reserva
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

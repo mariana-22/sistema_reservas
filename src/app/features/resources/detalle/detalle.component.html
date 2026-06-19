@@ -1,0 +1,126 @@
+<div class="detalle-container" *ngIf="!cargando">
+  <div *ngIf="error" class="alert alert-error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="exito" class="alert alert-success">
+    {{ exito }}
+  </div>
+
+  <div *ngIf="recurso" class="detalle-content">
+    <div class="recurso-info">
+      <h1>{{ recurso.nombre }}</h1>
+      <p class="descripcion">{{ recurso.descripcion }}</p>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <h3>Ubicación</h3>
+          <p>{{ recurso.ubicacion }}</p>
+        </div>
+        <div class="info-item">
+          <h3>Capacidad</h3>
+          <p>{{ recurso.capacidad }} personas</p>
+        </div>
+        <div class="info-item">
+          <h3>Tipo</h3>
+          <p>{{ recurso.tipo }}</p>
+        </div>
+        <div class="info-item">
+          <h3>Horarios Disponibles</h3>
+          <p>{{ recurso.horario_inicio }} - {{ recurso.horario_fin }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="formulario-reserva">
+      <h2>Realizar Reserva</h2>
+
+      <form [formGroup]="formularioReserva" (ngSubmit)="enviarReserva()">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fecha_inicio">Fecha de Inicio</label>
+            <input 
+              id="fecha_inicio"
+              type="date" 
+              formControlName="fecha_inicio"
+              class="form-control"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="hora_inicio">Hora de Inicio</label>
+            <input 
+              id="hora_inicio"
+              type="time" 
+              formControlName="hora_inicio"
+              class="form-control"
+            >
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fecha_fin">Fecha de Fin</label>
+            <input 
+              id="fecha_fin"
+              type="date" 
+              formControlName="fecha_fin"
+              class="form-control"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="hora_fin">Hora de Fin</label>
+            <input 
+              id="hora_fin"
+              type="time" 
+              formControlName="hora_fin"
+              class="form-control"
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="motivo">Motivo de la Reserva</label>
+          <textarea 
+            id="motivo"
+            formControlName="motivo"
+            placeholder="Describe el motivo de tu reserva..."
+            class="form-control"
+            rows="4"
+          ></textarea>
+        </div>
+
+        <button 
+          type="submit" 
+          class="btn btn-primary"
+          [disabled]="cargando"
+        >
+          {{ cargando ? 'Creando...' : 'Confirmar Reserva' }}
+        </button>
+      </form>
+    </div>
+
+    <div class="calendario-disponibilidad">
+      <h2>Reservas Existentes</h2>
+      <div *ngIf="reservas.length === 0" class="no-reservas">
+        No hay reservas para este recurso
+      </div>
+      <div *ngIf="reservas.length > 0" class="reservas-list">
+        <div *ngFor="let reserva of reservas" class="reserva-item">
+          <span class="fecha">{{ reserva.fecha_inicio | date:'short' }}</span>
+          <span class="horario">{{ reserva.hora_inicio }} - {{ reserva.hora_fin }}</span>
+          <span class="estado">{{ reserva.estado }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!recurso && !error" class="no-data">
+    Recurso no encontrado
+  </div>
+</div>
+
+<div *ngIf="cargando" class="loading">
+  Cargando...
+</div>

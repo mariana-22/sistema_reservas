@@ -1,0 +1,205 @@
+.detalle-container {
+  .alert {
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 2rem;
+
+    &.alert-error {
+      background-color: #fdeaea;
+      color: #c53030;
+      border: 1px solid #fc8181;
+    }
+
+    &.alert-success {
+      background-color: #e6ffed;
+      color: #22863a;
+      border: 1px solid #85e89d;
+    }
+  }
+
+  .detalle-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+
+    .recurso-info {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+      h1 {
+        color: #2c3e50;
+        margin-top: 0;
+      }
+
+      .descripcion {
+        color: #555;
+        line-height: 1.6;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-top: 1.5rem;
+
+        .info-item {
+          background-color: #f8f9fa;
+          padding: 1rem;
+          border-radius: 4px;
+
+          h3 {
+            color: #2c3e50;
+            font-size: 0.95rem;
+            margin: 0 0 0.5rem;
+          }
+
+          p {
+            color: #555;
+            margin: 0;
+          }
+        }
+      }
+    }
+
+    .formulario-reserva {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+      h2 {
+        color: #2c3e50;
+        margin-top: 0;
+      }
+
+      form {
+        .form-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem;
+
+          @media (max-width: 600px) {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        .form-group {
+          margin-bottom: 1.5rem;
+
+          label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-weight: 500;
+          }
+
+          .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: inherit;
+
+            &:focus {
+              outline: none;
+              border-color: #3498db;
+              box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            }
+          }
+
+          textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+          }
+        }
+
+        .btn {
+          width: 100%;
+          padding: 0.75rem;
+          border: none;
+          border-radius: 4px;
+          font-size: 1rem;
+          cursor: pointer;
+          background-color: #27ae60;
+          color: white;
+          transition: background-color 0.3s;
+
+          &:hover:not(:disabled) {
+            background-color: #229954;
+          }
+
+          &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+
+    .calendario-disponibilidad {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      grid-column: 1 / -1;
+
+      h2 {
+        color: #2c3e50;
+        margin-top: 0;
+      }
+
+      .no-reservas {
+        color: #7f8c8d;
+        text-align: center;
+        padding: 2rem;
+      }
+
+      .reservas-list {
+        display: grid;
+        gap: 0.5rem;
+
+        .reserva-item {
+          display: flex;
+          gap: 1rem;
+          padding: 1rem;
+          background-color: #f8f9fa;
+          border-radius: 4px;
+          border-left: 4px solid #e74c3c;
+
+          .fecha {
+            flex: 1;
+            font-weight: 500;
+            color: #2c3e50;
+          }
+
+          .horario {
+            flex: 1;
+            color: #555;
+          }
+
+          .estado {
+            background-color: #e74c3c;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+          }
+        }
+      }
+    }
+  }
+
+  .loading,
+  .no-data {
+    text-align: center;
+    padding: 2rem;
+    color: #7f8c8d;
+  }
+}

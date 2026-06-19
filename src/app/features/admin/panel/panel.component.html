@@ -1,0 +1,85 @@
+<div class="admin-container">
+  <div class="admin-header">
+    <h1>Panel de Administración</h1>
+  </div>
+
+  <div *ngIf="cargando" class="loading">
+    Cargando datos...
+  </div>
+
+  <div *ngIf="error" class="alert alert-error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!cargando" class="admin-content">
+    <!-- Tarjetas de estadísticas -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">{{ estadisticas.totalRecursos }}</div>
+        <div class="stat-label">Recursos Totales</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ estadisticas.totalReservas }}</div>
+        <div class="stat-label">Reservas Totales</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ estadisticas.reservasConfirmadas }}</div>
+        <div class="stat-label">Reservas Confirmadas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ estadisticas.totalUsuarios }}</div>
+        <div class="stat-label">Usuarios Registrados</div>
+      </div>
+    </div>
+
+    <!-- Recursos más reservados -->
+    <div class="section">
+      <h2>Recursos Más Reservados</h2>
+      <div *ngIf="estadisticas.recursosMasReservados.length === 0" class="no-data">
+        No hay datos disponibles
+      </div>
+      <div *ngIf="estadisticas.recursosMasReservados.length > 0" class="chart">
+        <div *ngFor="let recurso of estadisticas.recursosMasReservados" class="chart-item">
+          <div class="chart-label">{{ recurso.nombre }}</div>
+          <div class="chart-bar-container">
+            <div class="chart-bar" [style.width]="(recurso.cantidad / (estadisticas.recursosMasReservados[0]?.cantidad || 1) * 100) + '%'">
+              <span class="chart-value">{{ recurso.cantidad }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Últimas reservas -->
+    <div class="section">
+      <h2>Últimas Reservas</h2>
+      <div *ngIf="reservas.length === 0" class="no-data">
+        No hay reservas
+      </div>
+      <div *ngIf="reservas.length > 0" class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Recurso</th>
+              <th>Fecha</th>
+              <th>Horario</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let reserva of reservas.slice(0, 10)">
+              <td>{{ recursos.find(r => r.id === reserva.recurso_id)?.nombre || 'N/A' }}</td>
+              <td>{{ reserva.fecha_inicio | date:'mediumDate' }}</td>
+              <td>{{ reserva.hora_inicio }} - {{ reserva.hora_fin }}</td>
+              <td>
+                <span class="status-badge" [ngClass]="'status-' + reserva.estado">
+                  {{ reserva.estado }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

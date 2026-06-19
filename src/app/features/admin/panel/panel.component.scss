@@ -1,0 +1,170 @@
+.admin-container {
+  .admin-header {
+    margin-bottom: 2rem;
+
+    h1 {
+      color: #2c3e50;
+    }
+  }
+
+  .loading {
+    text-align: center;
+    padding: 2rem;
+    color: #7f8c8d;
+  }
+
+  .alert {
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 2rem;
+
+    &.alert-error {
+      background-color: #fdeaea;
+      color: #c53030;
+      border: 1px solid #fc8181;
+    }
+  }
+
+  .admin-content {
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+
+      .stat-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        text-align: center;
+
+        .stat-value {
+          font-size: 2rem;
+          font-weight: bold;
+          color: #3498db;
+          margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+          color: #7f8c8d;
+          font-size: 0.95rem;
+        }
+      }
+    }
+
+    .section {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+
+      h2 {
+        color: #2c3e50;
+        margin-top: 0;
+        margin-bottom: 1.5rem;
+      }
+
+      .no-data {
+        text-align: center;
+        padding: 2rem;
+        color: #7f8c8d;
+      }
+
+      .chart {
+        .chart-item {
+          margin-bottom: 1.5rem;
+
+          .chart-label {
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-weight: 500;
+          }
+
+          .chart-bar-container {
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+            height: 30px;
+
+            .chart-bar {
+              background: linear-gradient(90deg, #3498db, #2980b9);
+              height: 100%;
+              display: flex;
+              align-items: center;
+              padding: 0 0.5rem;
+              color: white;
+              font-weight: 500;
+              font-size: 0.875rem;
+
+              .chart-value {
+                margin-left: auto;
+              }
+            }
+          }
+        }
+      }
+
+      .table-container {
+        overflow-x: auto;
+
+        .admin-table {
+          width: 100%;
+          border-collapse: collapse;
+
+          thead {
+            background-color: #f8f9fa;
+
+            tr {
+              th {
+                padding: 1rem;
+                text-align: left;
+                color: #2c3e50;
+                font-weight: 600;
+                border-bottom: 2px solid #ddd;
+              }
+            }
+          }
+
+          tbody {
+            tr {
+              td {
+                padding: 1rem;
+                border-bottom: 1px solid #ecf0f1;
+                color: #555;
+
+                .status-badge {
+                  padding: 0.35rem 0.75rem;
+                  border-radius: 20px;
+                  font-size: 0.85rem;
+                  font-weight: 500;
+                  text-transform: capitalize;
+
+                  &.status-confirmada {
+                    background-color: #d4edda;
+                    color: #155724;
+                  }
+
+                  &.status-cancelada {
+                    background-color: #f8d7da;
+                    color: #721c24;
+                  }
+
+                  &.status-pendiente {
+                    background-color: #fff3cd;
+                    color: #856404;
+                  }
+                }
+              }
+
+              &:hover {
+                background-color: #f8f9fa;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

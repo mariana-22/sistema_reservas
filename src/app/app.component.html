@@ -1,0 +1,22 @@
+<div class="app-container">
+  <nav class="navbar">
+    <div class="navbar-content">
+      <h1>{{ title }}</h1>
+      <ul class="nav-links">
+        <li><a routerLink="/dashboard">Inicio</a></li>
+        <li><a routerLink="/recursos">Recursos</a></li>
+        <li><a routerLink="/reservas">Mis Reservas</a></li>
+        <li><a routerLink="/admin">Administración</a></li>
+        <li><a routerLink="/perfil">Perfil</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2024 Sistema de Reservas de Espacios. Todos los derechos reservados.</p>
+  </footer>
+</div>
