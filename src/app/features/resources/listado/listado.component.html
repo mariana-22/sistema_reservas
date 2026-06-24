@@ -1,57 +1,140 @@
 <div class="recursos-container">
   <div class="recursos-header">
-    <h1>Recursos Disponibles</h1>
-    <div class="search-bar">
-      <input 
-        type="text" 
-        [(ngModel)]="filtro" 
-        (input)="aplicarFiltro()"
-        placeholder="Buscar recursos..."
-        class="search-input"
-      >
+    <div>
+      <h1>Recursos Disponibles</h1>
+      <p class="subtitle">Encuentra los espacios disponibles y administra recursos desde un panel claro y ordenado.</p>
+    </div>
+
+    <div class="actions-row">
+      <div class="search-bar">
+        <input
+          type="text"
+          [(ngModel)]="filtro"
+          (input)="aplicarFiltro()"
+          placeholder="Buscar recursos..."
+          class="form-control"
+        />
+      </div>
+
+      <button class="btn btn-secondary" *ngIf="isAdmin" (click)="abrirCrearRecurso()">
+        <i class="fa-solid fa-plus"></i> Nuevo Recurso
+      </button>
     </div>
   </div>
 
-  <div *ngIf="cargando" class="loading">
-    Cargando recursos...
+  <div *ngIf="isAdmin && adminFormVisible" class="admin-form card">
+    <div class="form-header">
+      <div>
+        <h2>{{ editingRecurso ? 'Editar recurso' : 'Crear recurso' }}</h2>
+        <p class="subtitle">Los administradores pueden administrar recursos con campos seguros y validados.</p>
+      </div>
+      <button type="button" class="btn btn-outline" (click)="cerrarFormulario()">
+        <i class="fa-solid fa-xmark"></i> Cerrar
+      </button>
+    </div>
+
+    <form [formGroup]="recursoForm" (ngSubmit)="guardarRecurso()">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input id="nombre" type="text" formControlName="nombre" class="form-control" />
+          <small *ngIf="recursoForm.get('nombre')?.hasError('minlength')">Mínimo 3 caracteres</small>
+        </div>
+
+        <div class="form-group">
+          <label for="tipo">Tipo</label>
+          <input id="tipo" type="text" formControlName="tipo" class="form-control" />
+          <small *ngIf="recursoForm.get('tipo')?.hasError('minlength')">Mínimo 3 caracteres</small>
+        </div>
+
+        <div class="form-group">
+          <label for="ubicacion">Ubicación</label>
+          <input id="ubicacion" type="text" formControlName="ubicacion" class="form-control" />
+          <small *ngIf="recursoForm.get('ubicacion')?.hasError('minlength')">Mínimo 3 caracteres</small>
+        </div>
+
+        <div class="form-group">
+          <label for="capacidad">Capacidad</label>
+          <input id="capacidad" type="number" formControlName="capacidad" class="form-control" min="1" />
+          <small *ngIf="recursoForm.get('capacidad')?.hasError('min')">Debe ser mayor a 0</small>
+        </div>
+
+        <div class="form-group">
+          <label for="horario_inicio">Hora inicio</label>
+          <input id="horario_inicio" type="time" formControlName="horario_inicio" class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label for="horario_fin">Hora fin</label>
+          <input id="horario_fin" type="time" formControlName="horario_fin" class="form-control" />
+        </div>
+
+        <div class="form-group full-width">
+          <label for="descripcion">Descripción</label>
+          <textarea id="descripcion" rows="4" formControlName="descripcion" class="form-control"></textarea>
+          <small *ngIf="recursoForm.get('descripcion')?.hasError('minlength')">Mínimo 10 caracteres</small>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="cargando">
+          <i class="fa-solid fa-save"></i>
+          {{ editingRecurso ? 'Actualizar recurso' : 'Crear recurso' }}
+        </button>
+        <button type="button" class="btn btn-outline" (click)="cerrarFormulario()" [disabled]="cargando">
+          <i class="fa-solid fa-ban"></i> Cancelar
+        </button>
+      </div>
+    </form>
   </div>
 
-  <div *ngIf="error" class="alert alert-error">
-    {{ error }}
-  </div>
+  <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+  <div *ngIf="!success && error" class="alert alert-error">{{ error }}</div>
+
+  <div *ngIf="cargando" class="loading">Cargando recursos...</div>
 
   <div *ngIf="!cargando && recursosFiltrados.length === 0" class="no-data">
     No hay recursos disponibles
   </div>
 
   <div class="recursos-grid">
-    <div *ngFor="let recurso of recursosFiltrados" class="recurso-card">
+    <div *ngFor="let recurso of recursosFiltrados" class="recurso-card card">
       <div class="recurso-header">
-        <h3>{{ recurso.nombre }}</h3>
-        <span class="tipo-badge">{{ recurso.tipo }}</span>
+        <div>
+          <h3>{{ recurso.nombre }}</h3>
+          <span class="tipo-badge">{{ recurso.tipo }}</span>
+        </div>
+
+        <div class="recurso-status">
+          <span class="badge">{{ recurso.capacidad }} pax</span>
+        </div>
       </div>
 
       <p class="descripcion">{{ recurso.descripcion }}</p>
 
       <div class="recurso-info">
         <div class="info-item">
-          <span class="label">Ubicación:</span>
-          <span class="value">{{ recurso.ubicacion }}</span>
+          <i class="fa-solid fa-location-dot"></i>
+          <span>{{ recurso.ubicacion }}</span>
         </div>
         <div class="info-item">
-          <span class="label">Capacidad:</span>
-          <span class="value">{{ recurso.capacidad }} personas</span>
-        </div>
-        <div class="info-item">
-          <span class="label">Horarios:</span>
-          <span class="value">{{ recurso.horario_inicio }} - {{ recurso.horario_fin }}</span>
+          <i class="fa-solid fa-clock"></i>
+          <span>{{ recurso.horario_inicio }} - {{ recurso.horario_fin }}</span>
         </div>
       </div>
 
       <div class="recurso-actions">
         <a [routerLink]="['/recursos', recurso.id]" class="btn btn-primary">
-          Ver Disponibilidad
+          <i class="fa-solid fa-eye"></i> Ver Disponibilidad
         </a>
+        <div class="admin-card-actions" *ngIf="isAdmin">
+          <button type="button" class="btn btn-outline" (click)="abrirEditarRecurso(recurso)">
+            <i class="fa-solid fa-edit"></i> Editar
+          </button>
+          <button type="button" class="btn btn-danger" (click)="confirmarEliminar(recurso)">
+            <i class="fa-solid fa-trash"></i> Eliminar
+          </button>
+        </div>
       </div>
     </div>
   </div>

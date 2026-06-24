@@ -10,6 +10,25 @@ CREATE TABLE usuarios (
   fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+ALTER TABLE usuarios ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Usuarios can insert own row"
+  ON usuarios FOR INSERT
+  WITH CHECK (auth.uid() = id);
+
+CREATE POLICY "Usuarios can select own row"
+  ON usuarios FOR SELECT
+  USING (auth.uid() = id);
+
+CREATE POLICY "Usuarios can update own row"
+  ON usuarios FOR UPDATE
+  USING (auth.uid() = id)
+  WITH CHECK (auth.uid() = id);
+
+CREATE POLICY "Usuarios can delete own row"
+  ON usuarios FOR DELETE
+  USING (auth.uid() = id);
+
 -- Recursos
 CREATE TABLE recursos (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -34,6 +53,25 @@ CREATE TABLE horarios (
   hora_fin TIME NOT NULL,
   disponible BOOLEAN DEFAULT TRUE
 );
+
+ALTER TABLE horarios ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Horarios select públicos" ON horarios
+  FOR SELECT
+  USING (true);
+
+CREATE POLICY "Horarios insert autenticado" ON horarios
+  FOR INSERT
+  WITH CHECK (auth.uid() IS NOT NULL);
+
+CREATE POLICY "Horarios update autenticado" ON horarios
+  FOR UPDATE
+  USING (auth.uid() IS NOT NULL)
+  WITH CHECK (auth.uid() IS NOT NULL);
+
+CREATE POLICY "Horarios delete autenticado" ON horarios
+  FOR DELETE
+  USING (auth.uid() IS NOT NULL);
 
 -- Reservas
 CREATE TABLE reservas (

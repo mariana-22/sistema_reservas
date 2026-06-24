@@ -1,0 +1,85 @@
+<div class="horarios-container">
+  <div class="horarios-header">
+    <div>
+      <h1>Horarios de Recursos</h1>
+      <p class="subtitle">Consulta los horarios activos para cada recurso y organiza tus reservas con facilidad.</p>
+    </div>
+    <a routerLink="/recursos" class="btn btn-outline">
+      <i class="fa-solid fa-arrow-left"></i> Volver a Recursos
+    </a>
+  </div>
+
+  <div *ngIf="cargando" class="loading">Cargando horarios...</div>
+  <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+  <div *ngIf="exito" class="alert alert-success">{{ exito }}</div>
+
+  <section class="crear-horario">
+    <h2>Nuevo horario</h2>
+    <form [formGroup]="formularioHorario" (ngSubmit)="crearHorario()">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="recurso_id">Recurso</label>
+          <select id="recurso_id" formControlName="recurso_id" class="form-control">
+            <option value="" disabled>Selecciona un recurso</option>
+            <option *ngFor="let recurso of recursos" [value]="recurso.id">{{ recurso.nombre }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="dia_semana">Día de la semana</label>
+          <select id="dia_semana" formControlName="dia_semana" class="form-control">
+            <option [value]="1">Lunes</option>
+            <option [value]="2">Martes</option>
+            <option [value]="3">Miércoles</option>
+            <option [value]="4">Jueves</option>
+            <option [value]="5">Viernes</option>
+            <option [value]="6">Sábado</option>
+            <option [value]="0">Domingo</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="hora_inicio">Hora inicio</label>
+          <input id="hora_inicio" type="time" formControlName="hora_inicio" class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label for="hora_fin">Hora fin</label>
+          <input id="hora_fin" type="time" formControlName="hora_fin" class="form-control" />
+        </div>
+
+        <div class="form-group checkbox-group">
+          <label>
+            <input type="checkbox" formControlName="disponible" /> Disponible
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="cargando || cargandoRecursos">
+        {{ cargando ? 'Guardando...' : 'Crear horario' }}
+      </button>
+    </form>
+  </section>
+
+  <div *ngIf="!cargando && !error && horarios.length === 0" class="alert alert-info">
+    No hay horarios registrados todavía.
+  </div>
+
+  <div *ngIf="!cargando && !error && horarios.length > 0" class="horarios-grid">
+    <div *ngFor="let horario of horarios" class="horario-card card">
+      <div class="horario-recurso">{{ obtenerNombreRecurso(horario.recurso_id) }}</div>
+      <div class="horario-item">
+        <span class="label">Día</span>
+        <span>{{ formatearDia(horario.dia_semana) }}</span>
+      </div>
+      <div class="horario-item">
+        <span class="label">Hora</span>
+        <span>{{ horario.hora_inicio }} - {{ horario.hora_fin }}</span>
+      </div>
+      <div class="horario-item">
+        <span class="label">Disponible</span>
+        <span>{{ horario.disponible ? 'Sí' : 'No' }}</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -90,4 +90,30 @@
       }
     }
   }
+
+  .horarios-summary {
+    margin-top: 2rem;
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        padding: 1rem;
+        border-bottom: 1px solid #e0e0e0;
+        color: #555;
+
+        strong {
+          color: #2c3e50;
+        }
+      }
+    }
+
+    .stat {
+      font-size: 2rem;
+      margin: 1rem 0;
+      color: #2c3e50;
+    }
+  }
 }

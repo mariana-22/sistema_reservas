@@ -45,43 +45,55 @@ src/
 └── main.ts                  # Punto de entrada
 ```
 
-## 🚀 Instalación
+## 🚀 Guía de Instalación Rápida
 
-### Requisitos Previos
+👉 **Ver: [QUICK_START.md](./QUICK_START.md)** para instrucciones paso a paso
+
+### Resumen Rápido
+
+```bash
+# 1. Instalar dependencias
+npm install
+
+# 2. Configurar variables de entorno
+# - Opción A: Abre SETUP-CONFIGURATION.html en tu navegador
+# - Opción B: Crea archivo .env con credenciales de Supabase
+
+# 3. Crear tablas en Supabase
+# Ejecuta schema.sql en Supabase SQL Editor
+
+# 4. Iniciar desarrollo
+npm start
+
+# 5. Acceder a la aplicación
+# http://localhost:4200
+```
+
+## 📋 Requisitos Previos
 - Node.js 18+
 - npm o yarn
-- Cuenta de Supabase
+- Cuenta de Supabase (gratis en [supabase.com](https://supabase.com))
 
-### Pasos de Instalación
+### ⚡ Instalación Rápida
 
-1. **Clonar el repositorio**
+👉 **Para instrucciones detalladas, consulta [QUICK_START.md](./QUICK_START.md)**
+
+## 📚 Documentación Importante
+
+| Documento | Propósito |
+|-----------|----------|
+| [QUICK_START.md](./QUICK_START.md) | Guía paso a paso para comenzar |
+| [POWERSHELL_DISABLED.md](./POWERSHELL_DISABLED.md) | Si PowerShell está deshabilitado (Windows) |
+| [ERRORES_CORREGIDOS.md](./ERRORES_CORREGIDOS.md) | Resumen de problemas arreglados |
+| [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) | Solución de errores comunes |
+| [ARQUITECTURA.md](./ARQUITECTURA.md) | Arquitectura del proyecto |
+| [DESARROLLO.md](./DESARROLLO.md) | Fases de desarrollo |
+
 ```bash
 git clone <tu-repositorio>
 cd sistema-reservas
-```
-
-2. **Instalar dependencias**
-```bash
 npm install
-```
-
-3. **Configurar variables de entorno**
-```bash
-cp .env.example .env
-```
-Edita `.env` y añade tus credenciales de Supabase:
-```
-SUPABASE_URL=https://tu-proyecto.supabase.co
-SUPABASE_ANON_KEY=tu_clave_anonima
-```
-
-4. **Crear base de datos**
-- Ve a tu proyecto en Supabase
-- Abre el SQL Editor
-- Copia y ejecuta el contenido de `schema.sql`
-
-5. **Iniciar servidor de desarrollo**
-```bash
+# Configura SUPABASE_URL y SUPABASE_ANON_KEY (ver QUICK_START.md)
 npm start
 ```
 

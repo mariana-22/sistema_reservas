@@ -18,6 +18,7 @@ export class PanelComponent implements OnInit {
   usuarios: Usuario[] = [];
   cargando = false;
   error: string | null = null;
+  maxRecursosCantidad = 0;
   estadisticas = {
     totalRecursos: 0,
     totalReservas: 0,
@@ -67,11 +68,25 @@ export class PanelComponent implements OnInit {
       this.estadisticas.recursosMasReservados = Object.values(recursoMap)
         .sort((a, b) => b.cantidad - a.cantidad)
         .slice(0, 5);
+
+      // Calcular máximo para gráfico
+      if (this.estadisticas.recursosMasReservados.length > 0) {
+        this.maxRecursosCantidad = this.estadisticas.recursosMasReservados[0].cantidad;
+      }
     } catch (error) {
       console.error('Error al cargar datos de administración:', error);
       this.error = 'Error al cargar datos. Por favor, intenta de nuevo.';
     } finally {
       this.cargando = false;
     }
+  }
+
+  calcularPorcentajeRecurso(cantidad: number): number {
+    if (this.maxRecursosCantidad === 0) return 0;
+    return (cantidad / this.maxRecursosCantidad) * 100;
+  }
+
+  getNombreRecursoAdmin(recursoId: string): string {
+    return this.recursos.find(r => r.id === recursoId)?.nombre || 'Recurso';
   }
 }

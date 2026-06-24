@@ -1,9 +1,47 @@
 <div class="perfil-container">
   <div class="perfil-card">
-    <h1>Mi Perfil</h1>
-    <p>Bienvenido a tu perfil de usuario.</p>
-    <button (click)="cerrarSesion()" class="btn btn-danger">
-      Cerrar Sesión
-    </button>
+    <ng-container *ngIf="usuario$ | async as usuario; else noUsuario">
+      <div class="perfil-header">
+        <div>
+          <h1>Hola, {{ usuario.nombre || usuario.email }}</h1>
+          <p class="subtitulo">Bienvenido a tu espacio personal</p>
+        </div>
+        <span class="badge" [ngClass]="{ 'badge-admin': usuario.rol === 'admin', 'badge-usuario': usuario.rol !== 'admin' }">
+          {{ usuario.rol | titlecase }}
+        </span>
+      </div>
+
+      <div class="perfil-info">
+        <div class="info-row">
+          <span class="label">Nombre:</span>
+          <span>{{ usuario.nombre || '-' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Apellido:</span>
+          <span>{{ usuario.apellido || '-' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Email:</span>
+          <span>{{ usuario.email }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Rol:</span>
+          <span>{{ usuario.rol }}</span>
+        </div>
+      </div>
+
+      <div class="perfil-actions">
+        <button (click)="cerrarSesion()" class="btn btn-danger">
+          Cerrar Sesión
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-template #noUsuario>
+      <div class="perfil-no-user">
+        <h2>No se encontró tu información de usuario.</h2>
+        <p>Por favor inicia sesión nuevamente.</p>
+      </div>
+    </ng-template>
   </div>
 </div>

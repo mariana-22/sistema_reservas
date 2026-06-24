@@ -3,35 +3,105 @@
   justify-content: center;
   align-items: center;
   min-height: 80vh;
+  padding: 24px;
+}
 
-  .perfil-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 600px;
+.perfil-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(34, 60, 80, 0.12);
+  width: 100%;
+  max-width: 600px;
+}
 
-    h1 {
-      color: #2c3e50;
-      margin-bottom: 1rem;
-    }
+.perfil-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
 
-    .btn {
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 1rem;
+.perfil-header h1 {
+  color: #111827;
+  margin: 0;
+  font-size: 2rem;
+}
 
-      &.btn-danger {
-        background-color: #e74c3c;
-        color: white;
+.subtitulo {
+  margin: 8px 0 0;
+  color: #6b7280;
+}
 
-        &:hover {
-          background-color: #c0392b;
-        }
-      }
-    }
-  }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.badge-admin {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge-usuario {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.perfil-info {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-radius: 14px;
+  background: #f8fafc;
+  color: #111827;
+}
+
+.label {
+  font-weight: 700;
+  color: #334155;
+}
+
+.perfil-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn {
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 0.9rem 1.5rem;
+  font-size: 0.95rem;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.perfil-no-user {
+  text-align: center;
+}
+
+.perfil-no-user h2 {
+  margin-bottom: 12px;
+}
+
+.perfil-no-user p {
+  color: #475569;
 }

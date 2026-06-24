@@ -6,8 +6,24 @@
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Lm1gHVK2u8o7U+7+nOwhlxP4rssD2BqYxWtTZtFsw/kT3V80N6QmSV7hZQm3KyFZgFu7/8d7gqAHRhE52E3jpw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="assets/env-config.js"></script>
   </head>
   <body>
     <app-root></app-root>
+    <script>
+      // Cargar variables de localStorage antes de iniciar Angular
+      (function() {
+        const supabaseUrl = localStorage.getItem('SUPABASE_URL');
+        const supabaseKey = localStorage.getItem('SUPABASE_ANON_KEY');
+        
+        if (supabaseUrl) window.SUPABASE_URL = supabaseUrl;
+        if (supabaseKey) window.SUPABASE_ANON_KEY = supabaseKey;
+        
+        if (!supabaseUrl || !supabaseKey) {
+          console.warn('⚠️ Variables de Supabase no configuradas. Abre SETUP-CONFIGURATION.html para configurarlas.');
+        }
+      })();
+    </script>
   </body>
 </html>

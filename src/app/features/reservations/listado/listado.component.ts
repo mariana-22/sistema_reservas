@@ -5,6 +5,7 @@ import { Reserva, Usuario, Recurso } from '../../../core/models';
 import { ReservaService } from '../../../core/services/reserva.service';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { RecursoService } from '../../../core/services/recurso.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-listado-reservas',
@@ -36,7 +37,7 @@ export class ListadoComponent implements OnInit {
 
     try {
       // Obtener usuario actual
-      this.usuarioActual = await this.usuarioService.getUsuarioActual().toPromise() || null;
+      this.usuarioActual = await firstValueFrom(this.usuarioService.getUsuarioActual()) || null;
 
       if (!this.usuarioActual) {
         this.error = 'No hay usuario autenticado';

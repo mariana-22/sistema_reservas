@@ -1,6 +1,17 @@
 <div class="reservas-container">
   <div class="reservas-header">
-    <h1>Mis Reservas</h1>
+    <div>
+      <h1>Mis Reservas</h1>
+      <p class="subtitle">Administra tus reservas y crea nuevas desde la lista de recursos.</p>
+    </div>
+    <a routerLink="/recursos" class="btn btn-primary">
+      <i class="fa-solid fa-plus"></i> Nueva Reserva
+    </a>
+  </div>
+
+  <div class="reservas-cta">
+    <p>Para crear una nueva reserva, selecciona el recurso que deseas y completa el formulario de reserva.</p>
+    <a routerLink="/recursos" class="btn btn-secondary">Ver Recursos</a>
   </div>
 
   <div *ngIf="cargando" class="loading">

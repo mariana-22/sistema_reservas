@@ -31,9 +31,14 @@ export class UsuarioService {
   }
 
   async obtenerTodos(): Promise<Usuario[]> {
+    const client = this.supabaseService.getClient();
+    
+    if (!client) {
+      throw new Error('Supabase no configurado');
+    }
+
     try {
-      const { data, error } = await this.supabaseService
-        .getClient()
+      const { data, error } = await client
         .from('usuarios')
         .select('*');
 
@@ -46,9 +51,14 @@ export class UsuarioService {
   }
 
   async obtenerUsuarioPorId(id: string): Promise<Usuario | null> {
+    const client = this.supabaseService.getClient();
+    
+    if (!client) {
+      throw new Error('Supabase no configurado');
+    }
+
     try {
-      const { data, error } = await this.supabaseService
-        .getClient()
+      const { data, error } = await client
         .from('usuarios')
         .select('*')
         .eq('id', id)
@@ -62,10 +72,15 @@ export class UsuarioService {
     }
   }
 
-  async crearUsuario(usuario: Omit<Usuario, 'id' | 'fecha_registro' | 'fecha_actualizacion'>): Promise<Usuario> {
+  async crearUsuario(usuario: Omit<Usuario, 'fecha_registro' | 'fecha_actualizacion'>): Promise<Usuario> {
+    const client = this.supabaseService.getClient();
+    
+    if (!client) {
+      throw new Error('Supabase no configurado');
+    }
+
     try {
-      const { data, error } = await this.supabaseService
-        .getClient()
+      const { data, error } = await client
         .from('usuarios')
         .insert([{
           ...usuario,
@@ -83,10 +98,38 @@ export class UsuarioService {
     }
   }
 
+  async crearUsuarioSiNoExiste(user: any): Promise<Usuario | null> {
+    if (!user?.id || !user?.email) {
+      return null;
+    }
+
+    const existente = await this.obtenerUsuarioPorId(user.id);
+    if (existente) {
+      return existente;
+    }
+
+    const metadata = user.user_metadata || {};
+    const nuevoUsuario: Omit<Usuario, 'fecha_registro' | 'fecha_actualizacion'> = {
+      id: user.id,
+      email: user.email,
+      nombre: metadata.nombre || '',
+      apellido: metadata.apellido || '',
+      telefono: metadata.telefono || undefined,
+      rol: metadata.rol || 'usuario'
+    };
+
+    return this.crearUsuario(nuevoUsuario);
+  }
+
   async actualizarUsuario(id: string, actualizaciones: Partial<Usuario>): Promise<Usuario> {
+    const client = this.supabaseService.getClient();
+    
+    if (!client) {
+      throw new Error('Supabase no configurado');
+    }
+
     try {
-      const { data, error } = await this.supabaseService
-        .getClient()
+      const { data, error } = await client
         .from('usuarios')
         .update({
           ...actualizaciones,
@@ -106,9 +149,14 @@ export class UsuarioService {
   }
 
   async eliminarUsuario(id: string): Promise<void> {
+    const client = this.supabaseService.getClient();
+    
+    if (!client) {
+      throw new Error('Supabase no configurado');
+    }
+
     try {
-      const { error } = await this.supabaseService
-        .getClient()
+      const { error } = await client
         .from('usuarios')
         .delete()
         .eq('id', id);

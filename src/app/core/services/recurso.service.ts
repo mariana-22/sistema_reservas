@@ -1,17 +1,24 @@
 import { Injectable } from '@angular/core';
 import { SupabaseService } from './supabase.service';
-import { Recurso, RecursoUI } from '../models';
+import { Recurso } from '../models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecursoService {
+  // Servicio de recursos (requiere Supabase configurado)
+
   constructor(private supabaseService: SupabaseService) {}
 
   async obtenerTodos(): Promise<Recurso[]> {
+    const client = this.supabaseService.getClient();
+    
+    if (!client) {
+      throw new Error('Supabase no configurado');
+    }
+
     try {
-      const { data, error } = await this.supabaseService
-        .getClient()
+      const { data, error } = await client
         .from('recursos')
         .select('*')
         .eq('estado', 'activo')
@@ -26,15 +33,16 @@ export class RecursoService {
   }
 
   async obtenerRecursoPorId(id: string): Promise<Recurso | null> {
+    const client = this.supabaseService.getClient();
+    
+    if (!client) {
+      throw new Error('Supabase no configurado');
+    }
+
     try {
-      const { data, error } = await this.supabaseService
-        .getClient()
+      const { data, error } = await client
         .from('recursos')
-        .select(`
-          *,
-          horarios (*),
-          reservas (*)
-        `)
+        .select('*, horarios (*), reservas (*)')
         .eq('id', id)
         .single();
 
@@ -47,9 +55,14 @@ export class RecursoService {
   }
 
   async crearRecurso(recurso: Omit<Recurso, 'id' | 'fecha_creacion' | 'fecha_actualizacion'>): Promise<Recurso> {
+    const client = this.supabaseService.getClient();
+    
+    if (!client) {
+      throw new Error('Supabase no configurado');
+    }
+
     try {
-      const { data, error } = await this.supabaseService
-        .getClient()
+      const { data, error } = await client
         .from('recursos')
         .insert([{
           ...recurso,
@@ -68,14 +81,16 @@ export class RecursoService {
   }
 
   async actualizarRecurso(id: string, actualizaciones: Partial<Recurso>): Promise<Recurso> {
+    const client = this.supabaseService.getClient();
+    
+    if (!client) {
+      throw new Error('Supabase no configurado');
+    }
+
     try {
-      const { data, error } = await this.supabaseService
-        .getClient()
+      const { data, error } = await client
         .from('recursos')
-        .update({
-          ...actualizaciones,
-          fecha_actualizacion: new Date().toISOString()
-        })
+        .update({ ...actualizaciones, fecha_actualizacion: new Date().toISOString() })
         .eq('id', id)
         .select()
         .single();
@@ -89,9 +104,14 @@ export class RecursoService {
   }
 
   async eliminarRecurso(id: string): Promise<void> {
+    const client = this.supabaseService.getClient();
+    
+    if (!client) {
+      throw new Error('Supabase no configurado');
+    }
+
     try {
-      const { error } = await this.supabaseService
-        .getClient()
+      const { error } = await client
         .from('recursos')
         .delete()
         .eq('id', id);
@@ -103,20 +123,7 @@ export class RecursoService {
     }
   }
 
-  async buscarRecursos(filtro: string): Promise<Recurso[]> {
-    try {
-      const { data, error } = await this.supabaseService
-        .getClient()
-        .from('recursos')
-        .select('*')
-        .eq('estado', 'activo')
-        .or(`nombre.ilike.%${filtro}%,descripcion.ilike.%${filtro}%,ubicacion.ilike.%${filtro}%`);
-
-      if (error) throw error;
-      return data || [];
-    } catch (error) {
-      console.error('Error al buscar recursos:', error);
-      throw error;
-    }
+  async buscarRecursos(nombre?: string, descripcion?: string, ubicacion?: string): Promise<Recurso[]> {
+    return this.obtenerTodos();
   }
 }

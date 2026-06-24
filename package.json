@@ -2,15 +2,19 @@
   "name": "sistema-reservas",
   "version": "1.0.0",
   "description": "Sistema de Reservas de Espacios o Recursos con Angular y Supabase",
+  "private": true,
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "lint": "ng lint"
+    "generate-env": "node scripts/generate-env-config.js",
+    "start": "npm run generate-env && ng serve --open",
+    "dev": "npm run generate-env && ng serve",
+    "build": "npm run generate-env && ng build",
+    "build:prod": "npm run generate-env && ng build --configuration production",
+    "watch": "npm run generate-env && ng build --watch --configuration development",
+    "test": "npm run generate-env && ng test",
+    "lint": "ng lint",
+    "postinstall": "npm run generate-env"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "^18.0.0",
     "@angular/common": "^18.0.0",

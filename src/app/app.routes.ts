@@ -36,6 +36,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/reservations/listado/listado.component').then(m => m.ListadoComponent)
   },
   {
+    path: 'horarios',
+    canActivate: [AuthGuard],
+    loadComponent: () => import('./features/horarios/listado/listado.component').then(m => m.ListadoComponent)
+  },
+  {
     path: 'admin',
     canActivate: [AuthGuard, AdminGuard],
     loadComponent: () => import('./features/admin/panel/panel.component').then(m => m.PanelComponent)

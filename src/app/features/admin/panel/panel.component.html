@@ -42,7 +42,7 @@
         <div *ngFor="let recurso of estadisticas.recursosMasReservados" class="chart-item">
           <div class="chart-label">{{ recurso.nombre }}</div>
           <div class="chart-bar-container">
-            <div class="chart-bar" [style.width]="(recurso.cantidad / (estadisticas.recursosMasReservados[0]?.cantidad || 1) * 100) + '%'">
+            <div class="chart-bar" [style.width.%]="calcularPorcentajeRecurso(recurso.cantidad)">
               <span class="chart-value">{{ recurso.cantidad }}</span>
             </div>
           </div>
@@ -68,7 +68,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let reserva of reservas.slice(0, 10)">
-              <td>{{ recursos.find(r => r.id === reserva.recurso_id)?.nombre || 'N/A' }}</td>
+              <td>{{ getNombreRecursoAdmin(reserva.recurso_id) }}</td>
               <td>{{ reserva.fecha_inicio | date:'mediumDate' }}</td>
               <td>{{ reserva.hora_inicio }} - {{ reserva.hora_fin }}</td>
               <td>

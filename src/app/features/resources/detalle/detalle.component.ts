@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Recurso, Reserva } from '../../../core/models';
 import { RecursoService } from '../../../core/services/recurso.service';
 import { ReservaService } from '../../../core/services/reserva.service';
 import { UsuarioService } from '../../../core/services/usuario.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-detalle-recurso',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './detalle.component.html',
   styleUrl: './detalle.component.scss'
 })
@@ -85,7 +86,7 @@ export class DetalleComponent implements OnInit {
     this.exito = null;
 
     try {
-      const usuario = await this.usuarioService.getUsuarioActual().toPromise();
+      const usuario = await firstValueFrom(this.usuarioService.getUsuarioActual());
       if (!usuario) {
         this.error = 'Usuario no autenticado';
         return;

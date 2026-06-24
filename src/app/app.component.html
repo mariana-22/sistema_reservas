@@ -1,13 +1,17 @@
 <div class="app-container">
   <nav class="navbar">
     <div class="navbar-content">
-      <h1>{{ title }}</h1>
+      <div class="brand">
+        <i class="fa-solid fa-calendar-check"></i>
+        <span>{{ title }}</span>
+      </div>
       <ul class="nav-links">
-        <li><a routerLink="/dashboard">Inicio</a></li>
-        <li><a routerLink="/recursos">Recursos</a></li>
-        <li><a routerLink="/reservas">Mis Reservas</a></li>
-        <li><a routerLink="/admin">Administración</a></li>
-        <li><a routerLink="/perfil">Perfil</a></li>
+        <li><a routerLink="/dashboard"><i class="fa-solid fa-house"></i> Inicio</a></li>
+        <li><a routerLink="/recursos"><i class="fa-solid fa-layer-group"></i> Recursos</a></li>
+        <li><a routerLink="/horarios"><i class="fa-solid fa-clock"></i> Horarios</a></li>
+        <li><a routerLink="/reservas"><i class="fa-solid fa-book-open"></i> Reservas</a></li>
+        <li><a routerLink="/admin"><i class="fa-solid fa-users-gear"></i> Administración</a></li>
+        <li><a routerLink="/perfil"><i class="fa-solid fa-user"></i> Perfil</a></li>
       </ul>
     </div>
   </nav>

@@ -20,6 +20,14 @@
     </div>
 
     <div class="dashboard-card">
+      <div class="card-icon">⏰</div>
+      <h3>Horarios</h3>
+      <p>Revisa los horarios disponibles y la programación de recursos</p>
+      <p class="stat">{{ totalHorarios }} horarios registrados</p>
+      <a routerLink="/horarios" class="btn btn-primary">Ver Horarios</a>
+    </div>
+
+    <div class="dashboard-card">
       <div class="card-icon">👤</div>
       <h3>Mi Perfil</h3>
       <p>Actualiza tu información personal y preferencias</p>
@@ -27,14 +35,16 @@
     </div>
   </div>
 
-  <div class="dashboard-info">
-    <h2>¿Cómo usar el sistema?</h2>
-    <ol>
-      <li><strong>Explorar:</strong> Navega a la sección de Recursos para ver qué está disponible</li>
-      <li><strong>Seleccionar:</strong> Elige el recurso que deseas reservar</li>
-      <li><strong>Reservar:</strong> Completa el formulario con la fecha y hora deseada</li>
-      <li><strong>Confirmar:</strong> Tu reserva se confirmará inmediatamente</li>
-      <li><strong>Gestionar:</strong> Ve a "Mis Reservas" para modificar o cancelar tus reservas</li>
-    </ol>
+  <div class="dashboard-info horarios-summary">
+    <h2>Horarios recientes</h2>
+    <ul>
+      <li *ngFor="let horario of horariosRecientes">
+        <strong>Recurso:</strong> {{ horario.recurso_id }} —
+        <strong>Día:</strong> {{ horario.dia_semana }} —
+        <strong>Hora:</strong> {{ horario.hora_inicio }} - {{ horario.hora_fin }}
+      </li>
+    </ul>
   </div>
+
+  
 </div>

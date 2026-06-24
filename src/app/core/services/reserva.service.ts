@@ -9,9 +9,14 @@ export class ReservaService {
   constructor(private supabaseService: SupabaseService) {}
 
   async obtenerTodas(): Promise<Reserva[]> {
+    const client = this.supabaseService.getClient();
+    
+    if (!client) {
+      throw new Error('Supabase no configurado');
+    }
+
     try {
-      const { data, error } = await this.supabaseService
-        .getClient()
+      const { data, error } = await client
         .from('reservas')
         .select('*')
         .order('fecha_inicio', { ascending: false });
@@ -20,14 +25,19 @@ export class ReservaService {
       return data || [];
     } catch (error) {
       console.error('Error al obtener reservas:', error);
-      throw error;
+      return [];
     }
   }
 
   async obtenerReservasPorUsuario(usuarioId: string): Promise<Reserva[]> {
+    const client = this.supabaseService.getClient();
+    
+    if (!client) {
+      throw new Error('Supabase no configurado');
+    }
+
     try {
-      const { data, error } = await this.supabaseService
-        .getClient()
+      const { data, error } = await client
         .from('reservas')
         .select('*')
         .eq('usuario_id', usuarioId)
@@ -37,14 +47,19 @@ export class ReservaService {
       return data || [];
     } catch (error) {
       console.error('Error al obtener reservas del usuario:', error);
-      throw error;
+      return [];
     }
   }
 
   async obtenerReservasPorRecurso(recursoId: string): Promise<Reserva[]> {
+    const client = this.supabaseService.getClient();
+    
+    if (!client) {
+      throw new Error('Supabase no configurado');
+    }
+
     try {
-      const { data, error } = await this.supabaseService
-        .getClient()
+      const { data, error } = await client
         .from('reservas')
         .select('*')
         .eq('recurso_id', recursoId)
@@ -55,14 +70,19 @@ export class ReservaService {
       return data || [];
     } catch (error) {
       console.error('Error al obtener reservas del recurso:', error);
-      throw error;
+      return [];
     }
   }
 
   async obtenerReservaPorId(id: string): Promise<Reserva | null> {
+    const client = this.supabaseService.getClient();
+    
+    if (!client) {
+      throw new Error('Supabase no configurado');
+    }
+
     try {
-      const { data, error } = await this.supabaseService
-        .getClient()
+      const { data, error } = await client
         .from('reservas')
         .select('*')
         .eq('id', id)
@@ -72,7 +92,7 @@ export class ReservaService {
       return data || null;
     } catch (error) {
       console.error('Error al obtener reserva:', error);
-      throw error;
+      return null;
     }
   }
 
@@ -83,9 +103,14 @@ export class ReservaService {
     horaInicio: string,
     horaFin: string
   ): Promise<boolean> {
+    const client = this.supabaseService.getClient();
+    
+    if (!client) {
+      throw new Error('Supabase no configurado');
+    }
+
     try {
-      const { data, error } = await this.supabaseService
-        .getClient()
+      const { data, error } = await client
         .from('reservas')
         .select('*')
         .eq('recurso_id', recursoId)
@@ -95,7 +120,6 @@ export class ReservaService {
 
       if (error) throw error;
 
-      // Validar solapamiento de horarios
       if (data && data.length > 0) {
         for (const reserva of data) {
           if (this.hayConflictoHorario(horaInicio, horaFin, reserva.hora_inicio, reserva.hora_fin)) {
@@ -107,7 +131,7 @@ export class ReservaService {
       return false;
     } catch (error) {
       console.error('Error al validar conflicto de horario:', error);
-      throw error;
+      return false;
     }
   }
 
@@ -116,22 +140,27 @@ export class ReservaService {
   }
 
   async crearReserva(reserva: Omit<Reserva, 'id' | 'fecha_creacion'>): Promise<Reserva> {
+    const client = this.supabaseService.getClient();
+    
+    // Validar conflictos
+    const hayConflicto = await this.validarConflictoHorario(
+      reserva.recurso_id,
+      reserva.fecha_inicio,
+      reserva.fecha_fin,
+      reserva.hora_inicio,
+      reserva.hora_fin
+    );
+
+    if (hayConflicto) {
+      throw new Error('Hay un conflicto de horario con otra reserva');
+    }
+
+    if (!client) {
+      throw new Error('Supabase no configurado');
+    }
+
     try {
-      // Validar conflictos
-      const hayConflicto = await this.validarConflictoHorario(
-        reserva.recurso_id,
-        reserva.fecha_inicio,
-        reserva.fecha_fin,
-        reserva.hora_inicio,
-        reserva.hora_fin
-      );
-
-      if (hayConflicto) {
-        throw new Error('Hay un conflicto de horario con otra reserva');
-      }
-
-      const { data, error } = await this.supabaseService
-        .getClient()
+      const { data, error } = await client
         .from('reservas')
         .insert([{
           ...reserva,
@@ -149,9 +178,14 @@ export class ReservaService {
   }
 
   async actualizarReserva(id: string, actualizaciones: Partial<Reserva>): Promise<Reserva> {
+    const client = this.supabaseService.getClient();
+    
+    if (!client) {
+      throw new Error('Supabase no configurado');
+    }
+
     try {
-      const { data, error } = await this.supabaseService
-        .getClient()
+      const { data, error } = await client
         .from('reservas')
         .update(actualizaciones)
         .eq('id', id)
@@ -167,9 +201,14 @@ export class ReservaService {
   }
 
   async cancelarReserva(id: string): Promise<Reserva> {
+    const client = this.supabaseService.getClient();
+    
+    if (!client) {
+      throw new Error('Supabase no configurado');
+    }
+
     try {
-      const { data, error } = await this.supabaseService
-        .getClient()
+      const { data, error } = await client
         .from('reservas')
         .update({
           estado: 'cancelada',
