@@ -1,5 +1,5 @@
 {
-  "buildCommand": "ng build",
+  "buildCommand": "npm run build",
   "outputDirectory": "dist/sistema-reservas",
   "framework": "angular",
   "functions": {
@@ -7,9 +7,5 @@
       "memory": 1024,
       "maxDuration": 60
     }
-  },
-  "env": {
-    "SUPABASE_URL": "@SUPABASE_URL",
-    "SUPABASE_ANON_KEY": "@SUPABASE_ANON_KEY"
   }
 }
