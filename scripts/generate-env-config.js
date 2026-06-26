@@ -26,8 +26,12 @@ if (fs.existsSync(envPath)) {
   console.warn('.env file not found. env-config.js will be generated with empty values.');
 }
 
-const supabaseUrl = env.SUPABASE_URL || '';
-const supabaseKey = env.SUPABASE_ANON_KEY || env.SUPABASE_KEY || '';
+const supabaseUrl = env.SUPABASE_URL || process.env.SUPABASE_URL || '';
+const supabaseKey = env.SUPABASE_ANON_KEY || env.SUPABASE_KEY || process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY || '';
+
+if (!supabaseUrl || !supabaseKey) {
+  console.warn('⚠️ SUPABASE_URL y/o SUPABASE_ANON_KEY no están configurados. El archivo env-config.js se generará con valores vacíos.');
+}
 
 const content = `window.SUPABASE_URL = ${JSON.stringify(supabaseUrl)};
 window.SUPABASE_ANON_KEY = ${JSON.stringify(supabaseKey)};
