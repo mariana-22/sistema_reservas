@@ -18,7 +18,12 @@ function parseEnv(content) {
 
 const envPath = path.resolve(__dirname, '..', '.env');
 const outPath = path.resolve(__dirname, '..', 'src', 'assets', 'env-config.js');
+const assetsDir = path.dirname(outPath);
 let env = {};
+
+if (!fs.existsSync(assetsDir)) {
+  fs.mkdirSync(assetsDir, { recursive: true });
+}
 
 if (fs.existsSync(envPath)) {
   env = parseEnv(fs.readFileSync(envPath, 'utf8'));
