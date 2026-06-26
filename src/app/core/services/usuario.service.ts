@@ -1,16 +1,34 @@
 import { Injectable } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 import { Usuario, UsuarioUI } from '../models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
+  private static readonly STORAGE_KEY = 'SISTEMA_USUARIO_ACTUAL';
   private usuarioActual$ = new BehaviorSubject<Usuario | null>(null);
 
   constructor(private supabaseService: SupabaseService) {
+    const storedUsuario = localStorage.getItem(UsuarioService.STORAGE_KEY);
+    if (storedUsuario) {
+      try {
+        this.usuarioActual$.next(JSON.parse(storedUsuario));
+      } catch {
+        localStorage.removeItem(UsuarioService.STORAGE_KEY);
+      }
+    }
+
+    this.supabaseService.getAuthStatus().subscribe(async (isAuthenticated) => {
+      if (isAuthenticated) {
+        await this.cargarUsuarioActual();
+      } else {
+        this.clearUsuarioActual();
+      }
+    });
+
     this.cargarUsuarioActual();
   }
 
@@ -19,10 +37,22 @@ export class UsuarioService {
       const usuario = await this.supabaseService.getCurrentUser();
       if (usuario) {
         const usuarioData = await this.obtenerUsuarioPorId(usuario.id);
-        this.usuarioActual$.next(usuarioData || null);
+        this.setUsuarioActual(usuarioData || null);
+      } else {
+        this.clearUsuarioActual();
       }
     } catch (error) {
       console.error('Error al cargar usuario actual:', error);
+      this.clearUsuarioActual();
+    }
+  }
+
+  private setUsuarioActual(usuario: Usuario | null) {
+    this.usuarioActual$.next(usuario);
+    if (usuario) {
+      localStorage.setItem(UsuarioService.STORAGE_KEY, JSON.stringify(usuario));
+    } else {
+      localStorage.removeItem(UsuarioService.STORAGE_KEY);
     }
   }
 
@@ -54,7 +84,16 @@ export class UsuarioService {
     const client = this.supabaseService.getClient();
     
     if (!client) {
-      throw new Error('Supabase no configurado');
+      const storedUsuario = localStorage.getItem(UsuarioService.STORAGE_KEY);
+      if (storedUsuario) {
+        try {
+          const usuario = JSON.parse(storedUsuario) as Usuario;
+          return usuario.id === id ? usuario : null;
+        } catch {
+          localStorage.removeItem(UsuarioService.STORAGE_KEY);
+        }
+      }
+      return null;
     }
 
     try {
@@ -68,7 +107,7 @@ export class UsuarioService {
       return data || null;
     } catch (error) {
       console.error('Error al obtener usuario:', error);
-      throw error;
+      return null;
     }
   }
 
@@ -103,8 +142,15 @@ export class UsuarioService {
       return null;
     }
 
-    const existente = await this.obtenerUsuarioPorId(user.id);
+    let existente: Usuario | null = null;
+    try {
+      existente = await this.obtenerUsuarioPorId(user.id);
+    } catch (error) {
+      console.warn('Advertencia: no se pudo obtener usuario de la base de datos.', error);
+    }
+
     if (existente) {
+      this.setUsuarioActual(existente);
       return existente;
     }
 
@@ -118,7 +164,25 @@ export class UsuarioService {
       rol: metadata.rol || 'usuario'
     };
 
-    return this.crearUsuario(nuevoUsuario);
+    try {
+      const creado = await this.crearUsuario(nuevoUsuario);
+      this.setUsuarioActual(creado);
+      return creado;
+    } catch (error) {
+      console.warn('No se pudo crear usuario en la base de datos, usando almacenamiento local.', error);
+      const fallbackUsuario: Usuario = {
+        ...nuevoUsuario,
+        fecha_registro: new Date().toISOString(),
+        fecha_actualizacion: new Date().toISOString()
+      };
+      this.setUsuarioActual(fallbackUsuario);
+      return fallbackUsuario;
+    }
+  }
+
+  clearUsuarioActual(): void {
+    this.usuarioActual$.next(null);
+    localStorage.removeItem(UsuarioService.STORAGE_KEY);
   }
 
   async actualizarUsuario(id: string, actualizaciones: Partial<Usuario>): Promise<Usuario> {

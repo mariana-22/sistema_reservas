@@ -35,9 +35,12 @@ export class LoginComponent implements OnInit {
       const session = await this.supabaseService.getSession();
       if (session) {
         this.router.navigate(['/dashboard']);
+      } else {
+        this.usuarioService.clearUsuarioActual();
       }
     } catch (error) {
       console.error('Error al verificar sesión:', error);
+      this.usuarioService.clearUsuarioActual();
     }
   }
 
@@ -67,6 +70,7 @@ export class LoginComponent implements OnInit {
     } catch (error) {
       console.error('Error en login:', error);
       this.error = 'Credenciales inválidas. Por favor, intenta de nuevo.';
+      this.usuarioService.clearUsuarioActual();
     } finally {
       this.cargando = false;
     }

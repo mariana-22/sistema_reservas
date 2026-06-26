@@ -1,26 +1,34 @@
 <div class="app-container">
-  <nav class="navbar">
-    <div class="navbar-content">
-      <div class="brand">
-        <i class="fa-solid fa-calendar-check"></i>
-        <span>{{ title }}</span>
+  <ng-container *ngIf="mostrarLayoutPrincipal; else authLayout">
+    <nav class="navbar">
+      <div class="navbar-content">
+        <div class="brand">
+          <i class="fa-solid fa-calendar-check"></i>
+          <span>{{ title }}</span>
+        </div>
+        <ul class="nav-links">
+          <li><a routerLink="/dashboard"><i class="fa-solid fa-house"></i> Inicio</a></li>
+          <li><a routerLink="/recursos"><i class="fa-solid fa-layer-group"></i> Recursos</a></li>
+          <li><a routerLink="/horarios"><i class="fa-solid fa-clock"></i> Horarios</a></li>
+          <li><a routerLink="/reservas"><i class="fa-solid fa-book-open"></i> Reservas</a></li>
+          <li><a routerLink="/admin"><i class="fa-solid fa-users-gear"></i> Administración</a></li>
+          <li><a routerLink="/perfil"><i class="fa-solid fa-user"></i> Perfil</a></li>
+        </ul>
       </div>
-      <ul class="nav-links">
-        <li><a routerLink="/dashboard"><i class="fa-solid fa-house"></i> Inicio</a></li>
-        <li><a routerLink="/recursos"><i class="fa-solid fa-layer-group"></i> Recursos</a></li>
-        <li><a routerLink="/horarios"><i class="fa-solid fa-clock"></i> Horarios</a></li>
-        <li><a routerLink="/reservas"><i class="fa-solid fa-book-open"></i> Reservas</a></li>
-        <li><a routerLink="/admin"><i class="fa-solid fa-users-gear"></i> Administración</a></li>
-        <li><a routerLink="/perfil"><i class="fa-solid fa-user"></i> Perfil</a></li>
-      </ul>
-    </div>
-  </nav>
+    </nav>
 
-  <main class="main-content">
-    <router-outlet></router-outlet>
-  </main>
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
 
-  <footer class="footer">
-    <p>&copy; 2024 Sistema de Reservas de Espacios. Todos los derechos reservados.</p>
-  </footer>
+    <footer class="footer">
+      <p>&copy; 2024 Sistema de Reservas de Espacios. Todos los derechos reservados.</p>
+    </footer>
+  </ng-container>
+
+  <ng-template #authLayout>
+    <main class="main-content auth-page">
+      <router-outlet></router-outlet>
+    </main>
+  </ng-template>
 </div>

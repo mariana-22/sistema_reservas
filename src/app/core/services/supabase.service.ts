@@ -23,12 +23,31 @@ export class SupabaseService {
       try {
         this.supabase = createClient(supabaseUrl, supabaseKey);
         this.isConfigured = true;
+        this.syncAuthState();
         this.checkAuthStatus();
       } catch (error) {
         console.warn('⚠️ Error inicializando Supabase:', error);
       }
     } else {
       console.error('❌ Supabase no configurado. Establece `SUPABASE_URL` y `SUPABASE_ANON_KEY`.');
+    }
+  }
+
+  private async syncAuthState(): Promise<void> {
+    if (!this.supabase) {
+      this.isAuthenticated$.next(false);
+      return;
+    }
+
+    try {
+      const { data, error } = await this.supabase.auth.getSession();
+      if (error) {
+        console.warn('⚠️ Error al obtener sesión inicial:', error);
+      }
+      this.isAuthenticated$.next(!!data?.session);
+    } catch (error) {
+      console.warn('⚠️ Error al sincronizar estado de auth:', error);
+      this.isAuthenticated$.next(false);
     }
   }
 
@@ -99,13 +118,15 @@ export class SupabaseService {
     try {
       const { error } = await this.supabase.auth.signOut();
       if (error) throw error;
+      this.isAuthenticated$.next(false);
     } catch (error) {
       console.error('Error en logout:', error);
+      this.isAuthenticated$.next(false);
       throw error;
     }
   }
 
-    async getCurrentUser() {
+  async getCurrentUser() {
     if (!this.supabase) {
       throw new Error('Supabase no configurado');
     }

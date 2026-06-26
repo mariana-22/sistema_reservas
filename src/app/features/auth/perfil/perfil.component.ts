@@ -27,6 +27,7 @@ export class PerfilComponent {
   async cerrarSesion() {
     try {
       await this.supabaseService.signOut();
+      this.usuarioService.clearUsuarioActual();
       this.router.navigate(['/login']);
     } catch (error) {
       console.error('Error al cerrar sesión:', error);

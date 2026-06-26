@@ -70,11 +70,13 @@ export class RegistroComponent {
           telefono: telefono || undefined,
           rol: 'usuario'
         });
+        await this.supabaseService.signOut();
       }
 
       this.router.navigate(['/login']);
     } catch (error) {
       console.error('Error en registro:', error);
+      this.usuarioService.clearUsuarioActual();
       this.error = this.getErrorMessage(error);
     } finally {
       this.cargando = false;
